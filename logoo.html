@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 自定义动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        /* 输入框自动填充背景色修正 */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px white inset !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex items-center justify-center font-sans text-gray-700">
+
+    <!-- 登录卡片容器 -->
+    <div class="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl animate-fade-in mx-4">
+        <!-- 头部 Logo/标题区域 -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4">
+                <i class="fas fa-user-lock text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800">欢迎回来</h2>
+            <p class="text-sm text-gray-500 mt-2">请输入您的账号信息以继续</p>
+        </div>
+
+        <!-- 登录表单 -->
+        <form id="loginForm" class="space-y-6" onsubmit="handleLogin(event)">
+            
+            <!-- 用户名输入框 -->
+            <div class="relative group">
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-user text-gray-400 group-focus-within:text-blue-500 transition-colors"></i>
+                    </div>
+                    <input type="text" id="username" name="username" 
+                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none bg-gray-50 focus:bg-white placeholder-gray-400" 
+                        placeholder="请输入用户名" required>
+                </div>
+            </div>
+
+            <!-- 密码输入框 -->
+            <div class="relative group">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-lock text-gray-400 group-focus-within:text-blue-500 transition-colors"></i>
+                    </div>
+                    <input type="password" id="password" name="password" 
+                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none bg-gray-50 focus:bg-white placeholder-gray-400" 
+                        placeholder="请输入密码" required>
+                    <!-- 显示/隐藏密码按钮 -->
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePassword()">
+                        <i id="eyeIcon" class="fas fa-eye-slash text-gray-400 hover:text-blue-500 transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记住我与忘记密码 -->
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <span class="ml-2 text-gray-600">记住我</span>
+                </label>
+                <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">忘记密码?</a>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button type="submit" id="submitBtn"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0">
+                <span id="btnText">立即登录</span>
+                <i id="btnIcon" class="fas fa-arrow-right ml-2 mt-0.5"></i>
+                <!-- 加载动画 (默认隐藏) -->
+                <svg id="loadingSpinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+        </form>
+
+        <!-- 底部注册链接 -->
+        <div class="mt-6 text-center text-sm">
+            <span class="text-gray-600">还没有账号? </span>
+            <a href="#" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">立即注册</a>
+        </div>
+    </div>
+
+    <!-- 提示消息容器 (Toast) -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <script>
+        // 切换密码可见性
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        }
+
+        // 显示 Toast 消息
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            // 根据类型设置颜色
+            const bgClass = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+            toast.className = `${bgClass} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-x-full opacity-0`;
+            toast.innerHTML = `
+                <i class="fas ${iconClass}"></i>
+                <span class="font-medium">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // 动画进入
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-x-full', 'opacity-0');
+            });
+
+            // 3秒后移除
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // 处理登录提交
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+            const spinner = document.getElementById('loadingSpinner');
+
+            // 简单验证
+            if (!username || !password) {
+                showToast('请填写完整的用户名和密码', 'error');
+                return;
+            }
+
+            // 模拟加载状态
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            btnText.textContent = '登录中...';
+            btnIcon.classList.add('hidden');
+            spinner.classList.remove('hidden');
+
+            // 模拟网络请求延迟
+            setTimeout(() => {
+                // 恢复按钮状态
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = '立即登录';
+                btnIcon.classList.remove('hidden');
+                spinner.classList.add('hidden');
+
+                // 模拟登录成功 (实际项目中这里会调用API)
+                if (username.length > 0 && password.length >= 6) {
+                    showToast('登录成功！正在跳转...', 'success');
+                    // 这里可以添加跳转逻辑，例如: window.location.href = '/dashboard';
+                } else {
+                    showToast('密码长度至少为6位', 'error');
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
